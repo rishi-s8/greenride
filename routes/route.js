@@ -100,13 +100,39 @@ router.post('/addPool', (req,res,next)=>{
 
 //Delete Pool
 router.post('/deletePool', (req,res,next)=>{
-  Pool.findByIdAndRemove(req.body._id, (err, pool)=>{
-    if(err){
-      res.json({msg: "Failed to remove pool"});
-    }
-    else{
-      res.json({msg: "Pool removed successfully"});
-    }
+
+  Pool.findOne({_id: req.body._id}, (err, pool)=>{
+    Ride.findOne({_id: pool.ride}, (err, ride)=>{
+      if(err)
+      {
+        res.json({msgRide: "Cannot Find Ride"});
+        console.log("Cannot Find Ride");
+      }
+      else {
+        if(ride==null)
+        {
+          console.log("Cannot find ride");
+          res.json({msgRide: "Cannot find ride"});
+          return;
+        }
+        ride.availableSeats = ride.availableSeats + pool.bookedSeats;
+        ride.save((err)=>{
+          if(err){
+            console.log("Could not save ride");
+            res.json({msgRide: "Could not save ride"});
+          }
+        });
+        pool.remove((err)=>{
+          if(err){
+            console.log("Could not delete");
+            res.json({msgPool: "Pool not deleted"})
+          }
+          else {
+            res.json({msg: "Pool removed successfully"})
+          }
+        });
+      }
+    });
   });
 });
 
