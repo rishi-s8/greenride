@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Ride } from './rides';
+import { Ride, Pool } from './rides';
 // import 'rxjs/add/operator/catch';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -17,7 +17,9 @@ export class RidesService {
 
   getRides()
   {
-    return this.http.get('http://127.0.0.1:3000/api/getRides');
+    let x = this.http.get('http://127.0.0.1:3000/api/getRides');
+    console.log(x);
+    return x;
   }
 
   addRide(newRide)
@@ -35,8 +37,20 @@ export class RidesService {
     return this.http.post('http://127.0.0.1/3000/api/deleteRide', body, httpOptions);
   }
 
+  addPool(newPool)
+  {
+    let body = JSON.stringify(newPool);
+    return this.http.post('http://127.0.0.1:3000/api/addPool', body, httpOptions);
+  }
+
+  deletePool(id)
+  {
+    let body = JSON.stringify(id);
+    return this.http.post('http://127.0.0.1:3000/api/deletePool', body, httpOptions);
+  }
+
   currUser()
   {
-    return 'api/user/profile.json';
+    return this.http.get('http://127.0.0.1:3000/api/getCurrentUser');
   }
 }

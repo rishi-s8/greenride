@@ -33,5 +33,30 @@
     <div>
       {{ ride.user }}
     </div>
+    <div>
+      {{ ride.time }}
+    </div>
+    <div>
+      {{ ride.src }}
+    </div>
+    <div>
+      {{ ride.dest }}
+    </div>
+    <form (submit) = "addPool()">
+      <div hidden>
+        <label>
+          Ride:
+        </label>
+        <input type="number" [(ngModel)] = "pride" name = "pride" value = "{{ ride._id }}">
+      </div>
+      <div>
+        <label>
+          Required Seats:
+        </label>
+        <input type="number" [(ngModel)] = "bookedSeats" name = "bookedSeats">
+      </div>
+      <input type="submit" value="Book">
+    </form>
+    <hr />
   </div>
 </div>

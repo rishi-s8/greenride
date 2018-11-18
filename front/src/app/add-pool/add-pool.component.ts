@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RidesService } from '../rides.service';
-import { Ride } from '../rides';
+import { Ride, Pool } from '../rides';
 import { NgSwitchDefault } from '@angular/common';
 
 @Component({
@@ -13,7 +13,7 @@ import { NgSwitchDefault } from '@angular/common';
 export class AddPoolComponent implements OnInit {
   rides: Ride[] = [];
   ride: Ride;
-  user: string;
+  currUser: any;
   totalSeats: number;
   availableSeats: number;
   time: string;
@@ -21,6 +21,9 @@ export class AddPoolComponent implements OnInit {
   dest: string;
   paid: boolean;
   amount: number;
+  pool: Pool;
+  pride: string;
+  bookedSeats: string;
 
   constructor(private ridesService: RidesService) { }
 
@@ -29,7 +32,7 @@ export class AddPoolComponent implements OnInit {
     if (this.paid == undefined)
       this.paid = false;
     const newRide = {
-      user: "1",
+      user: this.currUser.user,
       totalSeats: this.totalSeats,
       availableSeats: this.totalSeats,
       time: this.time,
@@ -39,8 +42,8 @@ export class AddPoolComponent implements OnInit {
       amount: this.amount
     }
     this.ridesService.addRide(newRide)
-    .subscribe(ride => {
-      this.rides.push(this.ride);
+    .subscribe((ride:Ride) => {
+      this.rides.push(ride);
     });
   }
 
@@ -48,7 +51,7 @@ export class AddPoolComponent implements OnInit {
   {
     var rides = this.rides;
     this.ridesService.deleteRide(id)
-    .subscribe(data => {
+    .subscribe((data:any) => {
       if (data.n == 1)
       {
         for (var i=0;i<rides.length;++i)
@@ -62,9 +65,25 @@ export class AddPoolComponent implements OnInit {
     })
   }
 
+  addPool()
+  {
+    const newPool = {
+      user: this.currUser.user,
+      pool: this.pride,
+      bookedSeats: this.bookedSeats
+    }
+    this.ridesService.addPool(newPool)
+    .subscribe(pool => {
+    });
+  }
+
   ngOnInit() {
+    this.ridesService.currUser()
+    .subscribe( (currUser: any) =>
+      this.currUser = currUser);
+
     this.ridesService.getRides()
-    .subscribe( rides =>
-      this.ride = rides);
+    .subscribe( (rides:Ride[]) =>
+      this.rides = rides);
   }
 }

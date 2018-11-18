@@ -9,3 +9,10 @@ export class Ride {
     paid: boolean;
     amount: number;
 }
+
+export class Pool {
+    _id: string;
+    user: string;
+    ride: string;
+    bookedSeats: number;
+}
