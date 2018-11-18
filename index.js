@@ -5,7 +5,6 @@ const bodyparser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const route = require('./routes/route');
-// const auth = require('./authentication/auth');
 
 
 
